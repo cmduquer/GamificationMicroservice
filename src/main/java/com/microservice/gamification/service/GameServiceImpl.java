@@ -3,6 +3,8 @@ package com.microservice.gamification.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import com.microservice.gamification.client.MultiplicationResultAttemptClient;
+import com.microservice.gamification.client.dto.MultiplicationResultAttempt;
 import com.microservice.gamification.domain.Badge;
 import com.microservice.gamification.domain.BadgeCard;
 import com.microservice.gamification.domain.GameStats;
@@ -24,11 +26,14 @@ class GameServiceImpl implements GameService {
 
     private ScoreCardRepository scoreCardRepository;
     private BadgeCardRepository badgeCardRepository;
+    private MultiplicationResultAttemptClient attemptClient;
 
     GameServiceImpl(ScoreCardRepository scoreCardRepository,
-                    BadgeCardRepository badgeCardRepository) {
+                    BadgeCardRepository badgeCardRepository,
+                    MultiplicationResultAttemptClient attemptClient) {
         this.scoreCardRepository = scoreCardRepository;
         this.badgeCardRepository = badgeCardRepository;
+        this.attemptClient = attemptClient;
     }
 
     @Override
@@ -83,7 +88,16 @@ class GameServiceImpl implements GameService {
             badgeCards.add(firstWonBadge);
         }
 
-        
+        // Lucky number badge
+        MultiplicationResultAttempt attempt = attemptClient
+                .retrieveMultiplicationResultAttemptbyId(attemptId);
+        if(!containsBadge(badgeCardList, Badge.LUCKY_NUMBER) &&
+                (LUCKY_NUMBER == attempt.getMultiplicationFactorA() ||
+                LUCKY_NUMBER == attempt.getMultiplicationFactorB())) {
+            BadgeCard luckyNumberBadge = giveBadgeToUser(
+                    Badge.LUCKY_NUMBER, userId);
+            badgeCards.add(luckyNumberBadge);
+        }
 
         return badgeCards;
     }
