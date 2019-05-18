@@ -1,6 +1,8 @@
 package com.microservice.gamification.service;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.microservice.gamification.client.MultiplicationResultAttemptClient;
@@ -28,6 +30,7 @@ class GameServiceImpl implements GameService {
     private BadgeCardRepository badgeCardRepository;
     private MultiplicationResultAttemptClient attemptClient;
 
+    @Autowired
     GameServiceImpl(ScoreCardRepository scoreCardRepository,
                     BadgeCardRepository badgeCardRepository,
                     MultiplicationResultAttemptClient attemptClient) {

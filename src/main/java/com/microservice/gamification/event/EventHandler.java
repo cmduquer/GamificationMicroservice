@@ -2,6 +2,7 @@ package com.microservice.gamification.event;
 
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.microservice.gamification.service.GameService;
@@ -18,6 +19,7 @@ class EventHandler {
 
     private GameService gameService;
 
+    @Autowired
     EventHandler(final GameService gameService) {
         this.gameService = gameService;
     }
