@@ -8,10 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.microservice.gamification.domain.GameStats;
 import com.microservice.gamification.service.GameService;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * This class implements a REST API for the Gamification User Statistics service.
  */
 @RestController
+@Slf4j
 @RequestMapping("/stats")
 class UserStatsController {
 
@@ -23,6 +26,7 @@ class UserStatsController {
 
     @GetMapping
     public GameStats getStatsForUser(@RequestParam("userId") final Long userId) {
+    	log.info("User id @ {}", userId);
         return gameService.retrieveStatsForUser(userId);
     }
 }
